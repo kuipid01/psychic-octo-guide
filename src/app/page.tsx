@@ -4,12 +4,14 @@ import Navbar from "@/components/navbar";
 import Reviews from "@/components/reviews";
 import StepsSection from "@/components/step";
 import Image from "next/image";
-
+import {
+  RegisterLink,
+  LoginLink,
+} from "@kinde-oss/kinde-auth-nextjs/components";
 export default function Home() {
   return (
     <main className="flex overflow-x-hidden  justify-between relative  flex-col ">
       <header className=" w-full h-[150vh]  md:h-svh  flex flex-col justify-between  items-center">
-        <Navbar />
         <div className="w-full h-[150vh] md:h-screen absolute left-0 right-0">
           <Image
             fill
@@ -31,10 +33,10 @@ export default function Home() {
             </p>
             <div className=" flex w-full gap-4 flex-wrap ">
               <button className=" bg-transparent border-[2px] border-white rounded-[6px] h-[50px] text-center flex-1 font-medium">
-                Create Button
+                <LoginLink>Sign in</LoginLink>
               </button>
               <button className=" bg-transparent border-[2px] border-white rounded-[6px] h-[50px] text-center flex-1 font-medium">
-                Create Button
+                <RegisterLink>Sign up</RegisterLink>
               </button>
             </div>
           </div>

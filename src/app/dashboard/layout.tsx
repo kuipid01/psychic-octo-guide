@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import "./globals.css";
+
 import { LayoutIcon } from "lucide-react";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
 
 const poppins = Poppins({
   subsets: ["latin", "latin-ext"],
@@ -12,7 +10,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Kuipid Resume",
+  title: "Dashboard For Resume",
   description: "Your AI assisted resume generator",
 };
 
@@ -23,11 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={poppins.className}>
-        <Navbar bg={true} />
-        {children}
-        {/* <Footer /> */}
-      </body>
+      <body className={poppins.className}>{children}</body>
     </html>
   );
 }

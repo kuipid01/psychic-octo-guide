@@ -1,11 +1,19 @@
 import { AlignRight, ChevronDown, Menu } from "lucide-react";
 import React from "react";
 
-type Props = {};
+type Props = {
+  bg?: boolean;
+};
 
-function Navbar({}: Props) {
+function Navbar({ bg }: Props) {
   return (
-    <div className=" text-white flex px-5 md:px-10 relative justify-between z-[100] w-full   items-center h-[10vh]">
+    <div
+      className={`${
+        bg
+          ? "text-black border-b border-gray-200 shadow-blue-300 bg-white"
+          : "text-white bg-transparent "
+      }  flex px-5 md:px-10 relative justify-between z-[100] w-full   items-center h-[10vh]`}
+    >
       <h1 className=" font-black text-2xl">KuipidRes</h1>
       <ul className="hidden md:flex items-center text-base gap-4 font-medium">
         <li className=" flex items-center gap-[1px]">
