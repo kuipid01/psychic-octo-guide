@@ -8,7 +8,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <main className="flex overflow-x-hidden  justify-between relative  flex-col ">
-      <header className=" w-full h-[150vh] bg-red-200 md:h-svh  flex flex-col justify-between  items-center">
+      <header className=" w-full h-[150vh]  md:h-svh  flex flex-col justify-between  items-center">
         <Navbar />
         <div className="w-full h-[150vh] md:h-screen absolute left-0 right-0">
           <Image
@@ -19,7 +19,7 @@ export default function Home() {
           />
         </div>
         <div className="w-full h-[150vh] md:h-screen bg-black/50 absolute left-0 right-0"></div>
-        <div className=" w-[95%] text-white mx-auto h-fit flex-1 gap-5 items-center justify-center flex flex-col md:flex-row bg-green-500">
+        <div className=" w-[95%] text-white mx-auto h-fit flex-1 gap-5 items-center justify-center flex flex-col md:flex-row ">
           <div className=" relative md:max-w-[55%] flex flex-col gap-5">
             <h1 className=" text-3xl text-center md:text-4xl font-bold leading-[50px]">
               Unlock Your Dream Career with Our AI-Powered Resume Builder
