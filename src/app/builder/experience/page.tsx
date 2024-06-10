@@ -1,5 +1,5 @@
 "use client";
-
+import { toast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -12,7 +12,7 @@ import {
   NotebookPen,
 } from "lucide-react";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -29,42 +29,62 @@ import Link from "next/link";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import { Value } from "@radix-ui/react-select";
+import { useRouter } from "next/navigation";
 type Props = {};
 
-const formSchema = z.object({
-  job_title: z.string(),
-  employer: z.string(),
-  city_town: z.string(),
-  country: z.string(),
-  start_date: z.date(),
-  end_date: z.date(),
-});
-
+export interface FormType {
+  job_title: string;
+  employer: string;
+  city_town: string;
+  country: string;
+  start_date: Date | null;
+  end_date: Date | null;
+  descriptions: any;
+}
 function Contact({}: Props) {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      job_title: "",
-      employer: "",
-      city_town: "",
-      country: "",
-      start_date: new Date(),
-      end_date: undefined,
-    },
+  const router = useRouter();
+  const [jobsList, setJobsList] = useState<FormType[]>([]);
+  const [jobObject, setJobObject] = useState<FormType>({
+    job_title: "",
+    employer: "",
+    city_town: "",
+    country: "",
+    start_date: null,
+    end_date: null,
+    descriptions: [],
   });
+  const handleValue = (name: string, value: any) => {
+    setJobObject({ ...jobObject, [name]: value });
+  };
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const saveJob = () => {
+    const randomId = Math.floor(Math.random() * 100) + 1;
+    const Job = {
+      id: randomId,
+      ...jobObject,
+    };
+
+    const updatedJobsList = [...jobsList, Job];
+    setJobsList(updatedJobsList);
+
+    localStorage.setItem("job", JSON.stringify(updatedJobsList));
+    localStorage.setItem("lastJobId", JSON.stringify(Job.id));
+
+    router.push("/builder/experience-description");
+  };
+
+  useEffect(() => {
+    const jobArray = localStorage.getItem("job");
+    if (jobArray) {
+      const parsedArr = JSON.parse(jobArray);
+      setJobsList(parsedArr);
+    }
+  }, []);
+
   return (
     <div className="h-fit py-[40px] flex md:flex-row bg-gray-300 flex-col justify-center items-center">
-      <div className="p-[20px] h-screen rounded-md flex flex-col bg-white size-4/5">
+      <div className="p-[20px] h-fit md:h-[120vh] rounded-md flex flex-col bg-white size-[90%]">
         <h1 className="font-black text-left mb-2 text-2xl">Work Experience</h1>
         <p className="text-lg mb-2 font-light">
           Let’s start with your most recent job.
@@ -72,109 +92,59 @@ function Contact({}: Props) {
         <div className="flex mb-2 justify-end items-end">
           <TransBtn text="Tips" icon={<Lightbulb />} />
         </div>
-        <div className="flex w-full flex-1 gap-10 justify-evenly">
-          <div className="flex-1 flex justify-center items-center gap-3 flex-col rounded-xl bg-gray-300">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8 w-[90%] mx-auto"
-              >
-                <div className="flex gap-3">
-                  <FormField
-                    control={form.control}
-                    name="job_title"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>Job Title</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Job Title" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="employer"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>Employer</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Employer" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="flex gap-3">
-                  <FormField
-                    control={form.control}
-                    name="city_town"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>City/Town</FormLabel>
-                        <FormControl>
-                          <Input placeholder="City/Town" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="country"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>Country</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Country" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className=" flex gap-3">
-                  <FormField
-                    control={form.control}
-                    name="start_date"
-                    render={({ field }) => (
-                      <FormItem className="w-1/2  flex gap-3 items-center">
-                        <FormLabel>Start Date</FormLabel>
-                        <FormControl>
-                          <DatePicker
-                            selected={startDate}
-                            onChange={(date: any) => setStartDate(date)}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="end_date"
-                    render={({ field }) => (
-                      <FormItem className="w-1/2 flex gap-3 items-center">
-                        <FormLabel>End Date</FormLabel>
-                        <FormControl>
-                          <DatePicker
-                            selected={endDate}
-                            onChange={(date: any) => setEndDate(date)}
-                          />
-                          {/* <Input type="date" {...field} /> */}
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </form>
-            </Form>
+        <div className="flex md:flex-row flex-col w-full flex-1 gap-10 justify-evenly">
+          <div className="flex-1 py-4 flex justify-center items-center gap-3 flex-col rounded-xl bg-gray-300">
+            <form className="w-full p-4 flex flex-col gap-3 ">
+              <div className=" w-full  flex gap-2">
+                <input
+                  onChange={(e) => handleValue(e.target.name, e.target.value)}
+                  name="job_title"
+                  className=" flex-1 p-3 rounded-md border"
+                  type="text"
+                  placeholder="Enter JobTitle"
+                />
+                <input
+                  onChange={(e) => handleValue(e.target.name, e.target.value)}
+                  name="employer"
+                  className=" flex-1 p-3 rounded-md border"
+                  type="text"
+                  placeholder="Enter Employer Name"
+                />
+              </div>
+              <div className=" w-full  flex gap-2">
+                <input
+                  onChange={(e) => handleValue(e.target.name, e.target.value)}
+                  name="city_town"
+                  className=" flex-1 p-3 rounded-md border"
+                  type="text"
+                  placeholder="Enter City/Town"
+                />
+                <input
+                  onChange={(e) => handleValue(e.target.name, e.target.value)}
+                  name="country"
+                  className=" flex-1 p-3 rounded-md border"
+                  type="text"
+                  placeholder="Enter Country"
+                />
+              </div>
+              <div className=" w-full  flex gap-2">
+                <input
+                  onChange={(e) => handleValue(e.target.name, e.target.value)}
+                  name="start_date"
+                  className=" flex-1 p-3 rounded-md border"
+                  type="date"
+                />
+                <input
+                  onChange={(e) => handleValue(e.target.name, e.target.value)}
+                  name="end_date"
+                  className=" flex-1 p-3 rounded-md border"
+                  type="date"
+                />
+              </div>
+            </form>
           </div>
-          <div className="w-[28%] flex p-5 justify-center gap-3 items-center flex-col text-center rounded-xl bg-gray-300">
-            <div className="bg-white rounded-md h-full w-full relative">
+          <div className="md:w-[28%] relative h-[70vh] md:h-full w-full flex p-5 justify-center gap-3 items-center flex-col text-center rounded-xl bg-gray-300">
+            <div className=" rounded-md h-full w-full relative">
               <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
                 <TransBtn text="Preview" icon={<Eye />} />
               </div>
@@ -183,12 +153,12 @@ function Contact({}: Props) {
         </div>
         <div className="mt-4 flex justify-between">
           <BackBtn />
-          <Link
-            href="/builder/experience-description"
+          <Button
+            onClick={saveJob}
             className="bg-resGreen rounded-md text-center py-3 px-6 font-medium"
           >
-            Work Experience
-          </Link>
+            Save Next
+          </Button>
         </div>
       </div>
     </div>
