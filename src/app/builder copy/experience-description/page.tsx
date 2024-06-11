@@ -150,7 +150,6 @@ function Contact({}: Props) {
       ...rest,
       selectedDescriptions,
     };
-    // @ts-ignore
     const withouthJid = job.filter((j) => j.id !== Number(jId));
     const updatedList = [...withouthJid, jobObject];
     localStorage.setItem("job", JSON.stringify(updatedList));

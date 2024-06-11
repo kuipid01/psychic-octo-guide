@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import TransBtn from "@/components/TransBtn";
 import {
-  ChevronRight,
   Download,
   Eye,
   FileArchive,
@@ -70,7 +69,7 @@ function SummaryTips({}: Props) {
         <div className=" mt-4 flex justify-between">
           <BackBtn />
           <Link
-            href="/builder/summary"
+            href="/builder/experience"
             className=" bg-resGreen rounded-md text-center py-3 px-6 font-medium"
           >
             Next

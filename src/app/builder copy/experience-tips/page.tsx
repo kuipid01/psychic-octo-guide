@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import TransBtn from "@/components/TransBtn";
 import {
-  ChevronRight,
   Download,
   Eye,
   FileArchive,
@@ -36,9 +35,18 @@ const formSchema = z.object({
   country: z.string(),
   mobile_number: z.number(),
 });
-function SummaryTips({}: Props) {
+function Contact({}: Props) {
   // 1. Define your form.
-
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      city: "",
+      fullname: "",
+      country: "",
+      mobile_number: 0,
+    },
+  });
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
@@ -50,12 +58,14 @@ function SummaryTips({}: Props) {
       <div className=" p-[20px] h-screen  rounded-md flex flex-col bg-white size-4/5 ">
         <div className=" flex w-full flex-1 gap-10 justify-evenly">
           <div className=" flex-1 flex justify-center  items-left gap-3 flex-col rounded-xl ">
-            <h1 className=" font-black text-left mb-2 text-2lg">Last step!</h1>
-            <h1 className=" font-black text-left mb-2 text-5xl">Summary</h1>
+            <h1 className=" font-black text-left mb-2 text-2lg">First up!</h1>
+            <h1 className=" font-black text-left mb-2 text-5xl">
+              Work Experience
+            </h1>
             <p className=" mb-10 font-light">
-              This is the most read section of your resume. Give a brief
-              overview of your skills and background and tie that in how you
-              would positively impact the company.
+              We’re going to make it easy. Simply input your job title, and
+              we’ll show you expertly written bullet points you can add and edit
+              to describe what you did at your job.
             </p>
           </div>
           <div className=" w-[38%] flex p-5 justify-center gap-3 items-center flex-col text-center rounded-xl bg-gray-300">
@@ -70,7 +80,7 @@ function SummaryTips({}: Props) {
         <div className=" mt-4 flex justify-between">
           <BackBtn />
           <Link
-            href="/builder/summary"
+            href="/builder/experience"
             className=" bg-resGreen rounded-md text-center py-3 px-6 font-medium"
           >
             Next
@@ -81,4 +91,4 @@ function SummaryTips({}: Props) {
   );
 }
 
-export default SummaryTips;
+export default Contact;
